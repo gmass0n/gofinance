@@ -27,7 +27,7 @@ export const UserWrapper = styled.View`
   justify-content: space-between;
 
   padding: 0 25px;
-  margin-top: ${getStatusBarHeight() + 25}px;
+  margin-top: ${getStatusBarHeight() + 30}px;
 `;
 
 export const UserInfo = styled.View`
@@ -38,7 +38,7 @@ export const UserInfo = styled.View`
 export const Photo = styled.Image`
   width: ${RFValue(50)}px;
   height: ${RFValue(50)}px;
-  border-radius: 10px;
+  border-radius: ${RFValue(25)}px;
   margin-right: 15px;
 `;
 
@@ -71,5 +71,5 @@ export const HighlightCards = styled.ScrollView.attrs({
   width: 100%;
   position: absolute;
 
-  margin-top: ${RFPercentage(18)}px;
+  margin-top: ${RFPercentage(19)}px;
 `;

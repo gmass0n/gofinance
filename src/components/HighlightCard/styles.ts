@@ -1,9 +1,15 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
+import { HighlightCardType } from ".";
 
-export const Container = styled.View`
-  background-color: ${({ theme }) => theme.colors.shape};
+interface TypeProps {
+  type: HighlightCardType;
+}
+
+export const Container = styled.View<TypeProps>`
+  background-color: ${({ theme, type }) =>
+    type === "total" ? theme.colors.secondary : theme.colors.shape};
   width: ${RFValue(280)}px;
   border-radius: 10px;
   padding: 20px;
@@ -15,27 +21,42 @@ export const Header = styled.View`
   justify-content: space-between;
 `;
 
-export const Title = styled.Text`
+export const Title = styled.Text<TypeProps>`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(14)}px;
-  color: ${({ theme }) => theme.colors.textDark};
+  color: ${({ theme, type }) =>
+    type === "total" ? theme.colors.shape : theme.colors.textDark};
 `;
 
-export const Icon = styled(Feather)`
+export const Icon = styled(Feather)<TypeProps>`
   font-size: ${RFValue(40)}px;
+
+  ${({ type, theme }) => {
+    const iconColor: Record<HighlightCardType, string> = {
+      down: theme.colors.attention,
+      up: theme.colors.success,
+      total: theme.colors.shape,
+    };
+
+    return css`
+      color: ${iconColor[type]};
+    `;
+  }}
 `;
 
 export const Footer = styled.View``;
 
-export const Amount = styled.Text`
+export const Amount = styled.Text<TypeProps>`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(30)}px;
-  color: ${({ theme }) => theme.colors.textDark};
   margin-top: ${RFValue(30)}px;
+  color: ${({ theme, type }) =>
+    type === "total" ? theme.colors.shape : theme.colors.textDark};
 `;
 
-export const LastTransaction = styled.Text`
+export const LastTransaction = styled.Text<TypeProps>`
   font-family: ${({ theme }) => theme.fonts.regular};
   font-size: ${RFValue(13)}px;
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme, type }) =>
+    type === "total" ? theme.colors.shape : theme.colors.textDark};
 `;

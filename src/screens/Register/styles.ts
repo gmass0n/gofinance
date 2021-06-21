@@ -29,4 +29,7 @@ export const Form = styled.View`
   width: 100%;
 
   padding: 25px;
+  justify-content: space-between;
 `;
+
+export const FormFields = styled.View``;

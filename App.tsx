@@ -11,6 +11,7 @@ import {
 import { theme } from "./src/global/styles/theme";
 
 import { Dashboard } from "./src/screens/Dashboard";
+import { Register } from "./src/screens/Register";
 
 export const App: React.FC = () => {
   const [isFontsLoaded] = useFonts({
@@ -23,7 +24,7 @@ export const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Dashboard />
+      <Register />
     </ThemeProvider>
   );
 };

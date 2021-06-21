@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 
 import { HighlightCard } from "../../components/HighlightCard";
+import { TransactionCard } from "../../components/TransactionCard";
 
 import {
   Container,
@@ -14,6 +15,8 @@ import {
   UserName,
   PowerIcon,
   HighlightCards,
+  Transactions,
+  Title,
 } from "./styles";
 
 export const Dashboard: React.FC = () => {
@@ -59,6 +62,12 @@ export const Dashboard: React.FC = () => {
           lastTransaction="01 à 16 de novembro"
         />
       </HighlightCards>
+
+      <Transactions>
+        <Title>Listagem</Title>
+
+        <TransactionCard />
+      </Transactions>
     </Container>
   );
 };

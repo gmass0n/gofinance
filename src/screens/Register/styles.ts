@@ -33,3 +33,8 @@ export const Form = styled.View`
 `;
 
 export const FormFields = styled.View``;
+
+export const TransactionTypeButtons = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;

@@ -5,9 +5,11 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import {
   getBottomSpace,
   getStatusBarHeight,
+  isIphoneX,
 } from "react-native-iphone-x-helper";
 
 import { Transaction } from ".";
+import { BorderlessButton } from "react-native-gesture-handler";
 
 export const Container = styled.View`
   flex: 1;
@@ -40,6 +42,8 @@ export const UserInfo = styled.View`
   flex-direction: row;
   align-items: center;
 `;
+
+export const LogoutButton = styled(BorderlessButton)``;
 
 export const Photo = styled.Image`
   width: ${RFValue(50)}px;
@@ -84,7 +88,7 @@ export const Transactions = styled.View`
   flex: 1;
   padding: 0 25px;
 
-  margin-top: ${RFPercentage(12)}px;
+  margin-top: ${isIphoneX() ? RFPercentage(12) : RFPercentage(14)}px;
 `;
 
 export const Title = styled.Text`

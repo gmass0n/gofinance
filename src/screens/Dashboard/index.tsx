@@ -12,6 +12,7 @@ import {
   Header,
   UserWrapper,
   UserInfo,
+  LogoutButton,
   Photo,
   User,
   UserGretting,
@@ -78,9 +79,9 @@ export const Dashboard: React.FC = () => {
             </User>
           </UserInfo>
 
-          <TouchableOpacity activeOpacity={0.5}>
+          <LogoutButton onPress={() => {}}>
             <PowerIcon />
-          </TouchableOpacity>
+          </LogoutButton>
         </UserWrapper>
       </Header>
 

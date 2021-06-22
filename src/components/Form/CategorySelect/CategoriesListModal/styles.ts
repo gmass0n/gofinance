@@ -2,7 +2,6 @@ import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { FlatList, StyleSheet } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { categories } from "../../../../utils/categories";
 
@@ -43,7 +42,7 @@ export const Category = styled.TouchableOpacity<CategoryProps>`
 
   background-color: ${({ theme, isSelected }) =>
     isSelected ? theme.colors.secondaryLight : theme.colors.shape};
-
+ 
   border-top-width: ${StyleSheet.hairlineWidth}px;
   border-top-color: ${({ theme }) => theme.colors.text};
 `;

@@ -6,6 +6,7 @@ import { Feather } from "@expo/vector-icons";
 
 import { Dashboard } from "../screens/Dashboard";
 import { Register } from "../screens/Register";
+import { getBottomSpace, isIphoneX } from "react-native-iphone-x-helper";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -19,8 +20,9 @@ export const AppRoutes: React.FC = () => {
         inactiveTintColor: theme.colors.text,
         labelPosition: "beside-icon",
         style: {
-          paddingVertical: Platform.OS === "ios" ? 20 : 0,
-          height: 88,
+          paddingBottom: isIphoneX() ? getBottomSpace() : 0,
+          paddingTop: isIphoneX() ? getBottomSpace() / 2 : 0,
+          height: isIphoneX() ? 88 : 60,
         },
         labelStyle: {
           fontFamily: theme.fonts.medium,

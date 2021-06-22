@@ -2,7 +2,7 @@ export const theme = {
   colors: {
     primary: "#5636d3",
     secondary: "#ff872c",
-    secondaryLight: "rgba(255, 135, 44, 0.3)",
+    secondaryLight: "rgba(255, 135, 44, 0.15)",
     success: "#12a454",
     successLight: "rgba(18, 164, 84, 0.10)",
     attention: "#e83f5b",

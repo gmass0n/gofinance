@@ -1,5 +1,6 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
+import { Host } from "react-native-portalize";
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -24,7 +25,9 @@ export const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Register />
+      <Host>
+        <Register />
+      </Host>
     </ThemeProvider>
   );
 };

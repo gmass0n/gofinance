@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { Input } from "../../components/Form/Input";
 import { Button } from "../../components/Form/Button";
@@ -16,14 +16,25 @@ import {
   FormFields,
   TransactionTypeButtons,
 } from "./styles";
+import { CategoryProps } from "../../components/Form/CategorySelect/CategoriesListModal";
 
 export const Register: React.FC = () => {
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [selectedTransactionType, setSelectedTransactionType] =
     useState<TransactionType | "">("");
+
+  const [selectedCategory, setSelectedCategory] = useState({
+    key: "category",
+    name: "Category",
+  } as CategoryProps);
 
   function handleSelectTransactionType(type: TransactionType): void {
     setSelectedTransactionType(type);
   }
+
+  const handleSelectCategory = useCallback((category: CategoryProps) => {
+    setSelectedCategory(category);
+  }, []);
 
   return (
     <Container>
@@ -54,7 +65,10 @@ export const Register: React.FC = () => {
             />
           </TransactionTypeButtons>
 
-          <CategorySelect title="Alimentação" />
+          <CategorySelect
+            category={selectedCategory}
+            onSelectCategory={handleSelectCategory}
+          />
         </FormFields>
 
         <Button title="Enviar" />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import { useFocusEffect } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -7,6 +7,8 @@ import {
   TransactionCard,
   TransactionCardData,
 } from "../../components/TransactionCard";
+
+import { formatTransaction } from "../../utils/formatTransaction";
 
 import {
   Container,
@@ -24,9 +26,6 @@ import {
   Title,
   TransactionCards,
 } from "./styles";
-import { formatCurrency } from "../../utils/formatCurrency";
-import { formatDate } from "../../utils/formatDate";
-import { useCallback } from "react";
 
 export interface Transaction extends TransactionCardData {
   id: string;
@@ -42,16 +41,8 @@ export const Dashboard: React.FC = () => {
 
         if(storagedTransactions) {
           const formattedTransaction = 
-            (JSON.parse(storagedTransactions) as Transaction[]).map(transaction => {
-              const formattedAmount = formatCurrency(Number(transaction.amount));
-              const formattedDate = formatDate(new Date(transaction.date));
-              
-              return {
-                ...transaction,
-                amount: formattedAmount,
-                date: formattedDate,
-              }
-            })
+            (JSON.parse(storagedTransactions) as Transaction[])
+              .map(transaction => formatTransaction(transaction))
           
           setTransactions(formattedTransaction);
         }

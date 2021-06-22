@@ -7,12 +7,12 @@ import { CategoriesListModal, CategoryProps } from "./CategoriesListModal";
 import { Container, Category, Icon } from "./styles";
 
 interface CategorySelectProps {
-  category: CategoryProps;
+  category?: CategoryProps;
   onSelectCategory(category: CategoryProps): void;
 }
 
 export const CategorySelect: React.FC<CategorySelectProps> = ({
-  category,
+  category = { key: "placeholder", name: "Selecione uma categoria" },
   onSelectCategory,
 }) => {
   const modalRef = useRef<Modalize>(null);
@@ -21,16 +21,21 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     modalRef.current?.open();
   }
 
-  const handleSelectCategory = useCallback((category: CategoryProps) => {
-    onSelectCategory(category);
+  const handleSelectCategory = useCallback(
+    (selectedCategory: CategoryProps) => {
+      onSelectCategory(selectedCategory);
 
-    modalRef.current?.close();
-  }, []);
+      modalRef.current?.close();
+    },
+    []
+  );
 
   return (
     <>
       <Container onPress={handleOpenCategoriesListModal}>
-        <Category>{category.name}</Category>
+        <Category isPlaceholder={category.key === "placeholder"}>
+          {category.name}
+        </Category>
 
         <Icon name="chevron-down" />
       </Container>

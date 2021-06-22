@@ -28,10 +28,8 @@ export const Register: React.FC = () => {
   const [selectedTransactionType, setSelectedTransactionType] =
     useState<TransactionType | "">("");
 
-  const [selectedCategory, setSelectedCategory] = useState({
-    key: "category",
-    name: "Category",
-  } as CategoryProps);
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryProps | undefined>(undefined);
 
   const { control, handleSubmit } = useForm();
 
@@ -47,7 +45,7 @@ export const Register: React.FC = () => {
     const data = {
       ...formData,
       transactionType: selectedTransactionType,
-      category: selectedCategory.key,
+      category: selectedCategory?.key,
     };
 
     console.log(data);

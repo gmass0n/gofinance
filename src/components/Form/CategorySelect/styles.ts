@@ -2,6 +2,10 @@ import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 
+interface CategoryProps {
+  isPlaceholder: boolean;
+}
+
 export const Container = styled.TouchableOpacity.attrs({
   activeOpacity: 0.7,
 })`
@@ -16,10 +20,11 @@ export const Container = styled.TouchableOpacity.attrs({
   border-radius: 5px;
 `;
 
-export const Category = styled.Text`
+export const Category = styled.Text<CategoryProps>`
   font-size: ${RFValue(14)}px;
   font-family: ${({ theme }) => theme.fonts.regular};
-  color: ${({ theme }) => theme.colors.textDark};
+  color: ${({ theme, isPlaceholder }) =>
+    isPlaceholder ? theme.colors.text : theme.colors.textDark};
 `;
 
 export const Icon = styled(Feather)`

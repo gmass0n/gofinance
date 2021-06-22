@@ -6,10 +6,10 @@ import { formatDate } from "./formatDate";
 export function formatTransaction(transaction: Transaction): Transaction {
   const formattedAmount = formatCurrency(Number(transaction.amount));
   const formattedDate = formatDate(new Date(transaction.date));
-  
+
   return {
     ...transaction,
-    amount: formattedAmount,
-    date: formattedDate,
-  }
+    formattedAmount,
+    formattedDate,
+  };
 }

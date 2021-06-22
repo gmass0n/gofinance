@@ -17,9 +17,11 @@ export type TransactionCardType = "positive" | "negative";
 export interface TransactionCardData {
   type: TransactionCardType;
   name: string;
-  amount: string;
+  amount: number;
   category: string;
   date: string;
+  formattedAmount: string;
+  formattedDate: string;
 }
 
 interface TransactionCardProps {
@@ -27,9 +29,9 @@ interface TransactionCardProps {
 }
 
 export const TransactionCard: React.FC<TransactionCardProps> = ({ data }) => {
-  const { name, amount, category, date, type } = data;
+  const { name, formattedAmount, category, formattedDate, type } = data;
 
-  const findCategory = categories.find(item => item.key === category);
+  const findCategory = categories.find((item) => item.key === category);
 
   return (
     <Container>
@@ -37,7 +39,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ data }) => {
 
       <Amount type={type}>
         {type === "negative" ? "- " : ""}
-        {amount}
+        {formattedAmount}
       </Amount>
 
       <Footer>
@@ -51,7 +53,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({ data }) => {
           )}
         </Category>
 
-        <Date>{date}</Date>
+        <Date>{formattedDate}</Date>
       </Footer>
     </Container>
   );

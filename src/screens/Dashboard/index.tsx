@@ -1,5 +1,5 @@
-import React from "react";
-import { TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { HighlightCard } from "../../components/HighlightCard";
 import {
@@ -23,48 +23,38 @@ import {
   Title,
   TransactionCards,
 } from "./styles";
+import { formatCurrency } from "../../utils/formatCurrency";
+import { formatDate } from "../../utils/formatDate";
 
 export interface Transaction extends TransactionCardData {
   id: string;
 }
 
-const data: Transaction[] = [
-  {
-    id: "1",
-    type: "positive",
-    title: "Desenvolvimento",
-    amount: "R$ 12.000,00",
-    date: "03/04/2021",
-    category: {
-      icon: "dollar-sign",
-      name: "Vendas",
-    },
-  },
-  {
-    id: "2",
-    type: "negative",
-    title: "Hamgugeria",
-    amount: "R$ 59,00",
-    date: "03/04/2021",
-    category: {
-      icon: "coffee",
-      name: "Alimentação",
-    },
-  },
-  {
-    id: "3",
-    type: "negative",
-    title: "Aluguel do apartamento",
-    amount: "R$ 1.200,00",
-    date: "03/04/2021",
-    category: {
-      icon: "shopping-bag",
-      name: "Casa",
-    },
-  },
-];
-
 export const Dashboard: React.FC = () => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const storagedTransactions = await AsyncStorage.getItem('@gofinances:transactions');
+
+      if(storagedTransactions) {
+        const formattedTransaction = 
+          (JSON.parse(storagedTransactions) as Transaction[]).map(transaction => {
+            const formattedAmount = formatCurrency(Number(transaction.amount));
+            const formattedDate = formatDate(new Date(transaction.date));
+            
+            return {
+              ...transaction,
+              amount: formattedAmount,
+              date: formattedDate,
+            }
+          })
+        
+        setTransactions(formattedTransaction);
+      }
+    })()
+  }, [])
+
   return (
     <Container>
       <Header>
@@ -112,8 +102,8 @@ export const Dashboard: React.FC = () => {
         <Title>Listagem</Title>
 
         <TransactionCards
-          data={data}
-          keyExtractor={(item) => item.title}
+          data={transactions}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <TransactionCard data={item} />}
         />
       </Transactions>

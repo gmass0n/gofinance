@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
+import { useForm } from "react-hook-form";
 
-import { Input } from "../../components/Form/Input";
+import { UncontrolledInput } from "../../components/Form/UncontrolledInput";
 import { Button } from "../../components/Form/Button";
 import { CategorySelect } from "../../components/Form/CategorySelect";
 import {
@@ -18,8 +19,12 @@ import {
 } from "./styles";
 import { CategoryProps } from "../../components/Form/CategorySelect/CategoriesListModal";
 
+interface FormData {
+  name: string;
+  amount: string;
+}
+
 export const Register: React.FC = () => {
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [selectedTransactionType, setSelectedTransactionType] =
     useState<TransactionType | "">("");
 
@@ -27,6 +32,8 @@ export const Register: React.FC = () => {
     key: "category",
     name: "Category",
   } as CategoryProps);
+
+  const { control, handleSubmit } = useForm();
 
   function handleSelectTransactionType(type: TransactionType): void {
     setSelectedTransactionType(type);
@@ -36,6 +43,16 @@ export const Register: React.FC = () => {
     setSelectedCategory(category);
   }, []);
 
+  function handleRegister(formData: FormData): void {
+    const data = {
+      ...formData,
+      transactionType: selectedTransactionType,
+      category: selectedCategory.key,
+    };
+
+    console.log(data);
+  }
+
   return (
     <Container>
       <Header>
@@ -44,9 +61,17 @@ export const Register: React.FC = () => {
 
       <Form>
         <FormFields>
-          <Input placeholder="Digite o nome" />
+          <UncontrolledInput
+            name="name"
+            control={control}
+            placeholder="Digite o nome"
+          />
 
-          <Input placeholder="Digite o preço" />
+          <UncontrolledInput
+            name="amount"
+            control={control}
+            placeholder="Digite o preço"
+          />
 
           <TransactionTypeButtons>
             <TransactionTypeButton
@@ -71,7 +96,7 @@ export const Register: React.FC = () => {
           />
         </FormFields>
 
-        <Button title="Enviar" />
+        <Button title="Enviar" onPress={handleSubmit(handleRegister)} />
       </Form>
     </Container>
   );

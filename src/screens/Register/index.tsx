@@ -3,6 +3,9 @@ import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native';
+import uuid from 'react-native-uuid';
 
 import { UncontrolledInput } from "../../components/Form/UncontrolledInput";
 import { Button } from "../../components/Form/Button";
@@ -21,6 +24,7 @@ import {
   FormFields,
   TransactionTypeButtons,
 } from "./styles";
+import { useEffect } from "react";
 
 interface FormData {
   name: string;
@@ -36,6 +40,8 @@ const formSchema = Yup.object().shape({
 });
 
 export const Register: React.FC = () => {
+  const navigation = useNavigation();
+
   const [selectedTransactionType, setSelectedTransactionType] =
     useState<TransactionType | "">("");
 
@@ -46,9 +52,20 @@ export const Register: React.FC = () => {
     control,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(formSchema),
   });
+
+  useEffect(() => {
+    (async () => {
+      const data = await AsyncStorage.getItem('@gofinances:transactions');
+
+      if(data) {
+        console.log(JSON.parse(data))
+      }
+    })()
+  }, [])
 
   function handleSelectTransactionType(type: TransactionType): void {
     setSelectedTransactionType(type);
@@ -58,23 +75,41 @@ export const Register: React.FC = () => {
     setSelectedCategory(category);
   }, []);
 
-  function handleRegister(formData: FormData): void {
+  async function handleRegister(formData: FormData): Promise<void> {
     if (!selectedTransactionType) {
-      return Alert.alert("Selecione o tipo da transação!");
+      return Alert.alert("Por favor, selecione o tipo da transação!");
     }
-
-    if (!selectedCategory) {
-      return Alert.alert("Selecione a categoria!");
+   
+    if (!selectedCategory) { 
+      return Alert.alert("Por favor, selecione a categoria!");
     }
 
     const data = {
+      id: String(uuid.v4()),
       name: formData.name,
       amount: formData.amount,
       transactionType: selectedTransactionType,
       category: selectedCategory?.key,
-    };
+      date: new Date()
+    }; 
+  
+    try {
+      const storagedTransactions = await AsyncStorage.getItem('@gofinances:transactions');
+      const transactions = storagedTransactions ? JSON.parse(storagedTransactions) : [];
 
-    console.log(data);
+      const newTransactions = [...transactions, data];
+
+      await AsyncStorage.setItem('@gofinances:transactions', JSON.stringify(newTransactions));
+
+      setSelectedCategory(undefined);
+      setSelectedTransactionType('');
+      reset()
+
+      navigation.navigate('Dashboard')
+    } catch (error) {
+      console.log(error); 
+      Alert.alert("Ops, não foi possível salvar!")
+    }
   }
 
   return (

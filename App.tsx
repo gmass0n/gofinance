@@ -1,6 +1,7 @@
+import "react-native-gesture-handler";
+
 import React from "react";
 import { ThemeProvider } from "styled-components";
-import { Host } from "react-native-portalize";
 import AppLoading from "expo-app-loading";
 import {
   useFonts,
@@ -11,8 +12,7 @@ import {
 
 import { theme } from "./src/global/styles/theme";
 
-import { Dashboard } from "./src/screens/Dashboard";
-import { Register } from "./src/screens/Register";
+import { Routes } from "./src/routes";
 
 export const App: React.FC = () => {
   const [isFontsLoaded] = useFonts({
@@ -25,9 +25,7 @@ export const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Host>
-        <Register />
-      </Host>
+      <Routes />
     </ThemeProvider>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useFocusEffect } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { HighlightCard } from "../../components/HighlightCard";
@@ -25,6 +26,7 @@ import {
 } from "./styles";
 import { formatCurrency } from "../../utils/formatCurrency";
 import { formatDate } from "../../utils/formatDate";
+import { useCallback } from "react";
 
 export interface Transaction extends TransactionCardData {
   id: string;
@@ -33,27 +35,29 @@ export interface Transaction extends TransactionCardData {
 export const Dashboard: React.FC = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      const storagedTransactions = await AsyncStorage.getItem('@gofinances:transactions');
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        const storagedTransactions = await AsyncStorage.getItem('@gofinances:transactions');
 
-      if(storagedTransactions) {
-        const formattedTransaction = 
-          (JSON.parse(storagedTransactions) as Transaction[]).map(transaction => {
-            const formattedAmount = formatCurrency(Number(transaction.amount));
-            const formattedDate = formatDate(new Date(transaction.date));
-            
-            return {
-              ...transaction,
-              amount: formattedAmount,
-              date: formattedDate,
-            }
-          })
-        
-        setTransactions(formattedTransaction);
-      }
-    })()
-  }, [])
+        if(storagedTransactions) {
+          const formattedTransaction = 
+            (JSON.parse(storagedTransactions) as Transaction[]).map(transaction => {
+              const formattedAmount = formatCurrency(Number(transaction.amount));
+              const formattedDate = formatDate(new Date(transaction.date));
+              
+              return {
+                ...transaction,
+                amount: formattedAmount,
+                date: formattedDate,
+              }
+            })
+          
+          setTransactions(formattedTransaction);
+        }
+      })()
+    }, [])
+  )
 
   return (
     <Container>

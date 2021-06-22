@@ -25,6 +25,7 @@ import {
   TransactionTypeButtons,
 } from "./styles";
 import { useEffect } from "react";
+import { Transaction } from "../Dashboard";
 
 interface FormData {
   name: string;
@@ -84,13 +85,13 @@ export const Register: React.FC = () => {
       return Alert.alert("Por favor, selecione a categoria!");
     }
 
-    const data = {
+    const data: Transaction = {
       id: String(uuid.v4()),
       name: formData.name,
       amount: formData.amount,
-      transactionType: selectedTransactionType,
+      type: selectedTransactionType,
       category: selectedCategory?.key,
-      date: new Date()
+      date: new Date().toISOString()
     }; 
   
     try {
@@ -140,18 +141,18 @@ export const Register: React.FC = () => {
 
             <TransactionTypeButtons>
               <TransactionTypeButton
-                type="up"
+                type="positive"
                 title="Income"
                 style={{ marginRight: 15 }}
-                isActive={selectedTransactionType === "up"}
-                onPress={() => handleSelectTransactionType("up")}
+                isActive={selectedTransactionType === "positive"}
+                onPress={() => handleSelectTransactionType("positive")}
               />
 
               <TransactionTypeButton
-                type="down"
+                type="negative"
                 title="Outcome"
-                isActive={selectedTransactionType === "down"}
-                onPress={() => handleSelectTransactionType("down")}
+                isActive={selectedTransactionType === "negative"}
+                onPress={() => handleSelectTransactionType("negative")}
               />
             </TransactionTypeButtons>
 

@@ -1,10 +1,18 @@
 import React from "react";
 import { TextInputProps } from "react-native";
 
-import { Container } from "./styles";
+import { Container, TextInput, ErrorMessage } from "./styles";
 
-type InputProps = TextInputProps;
+export interface InputProps extends TextInputProps {
+  error?: string;
+}
 
-export const Input: React.FC<InputProps> = ({ ...props }) => {
-  return <Container {...props} />;
+export const Input: React.FC<InputProps> = ({ error = "", ...props }) => {
+  return (
+    <Container>
+      <TextInput {...props} />
+
+      {!!error && <ErrorMessage>{error}</ErrorMessage>}
+    </Container>
+  );
 };

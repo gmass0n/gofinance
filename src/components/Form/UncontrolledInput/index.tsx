@@ -1,12 +1,11 @@
 import React from "react";
 import { Control, Controller } from "react-hook-form";
-import { TextInputProps } from "react-native";
 
-import { Input } from "../Input";
+import { Input, InputProps } from "../Input";
 
 import { Container } from "./styles";
 
-interface UncontrolledInputProps extends TextInputProps {
+interface UncontrolledInputProps extends InputProps {
   control: Control;
   name: string;
 }

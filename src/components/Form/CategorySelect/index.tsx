@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useCallback } from "react";
+import { Keyboard } from "react-native";
 import { Modalize } from "react-native-modalize";
 
 import { CategoriesListModal, CategoryProps } from "./CategoriesListModal";
@@ -19,6 +20,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
 
   function handleOpenCategoriesListModal(): void {
     modalRef.current?.open();
+    Keyboard.dismiss();
   }
 
   const handleSelectCategory = useCallback(

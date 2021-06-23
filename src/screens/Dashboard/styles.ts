@@ -2,11 +2,7 @@ import styled from "styled-components/native";
 import { FlatList } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import {
-  getBottomSpace,
-  getStatusBarHeight,
-  isIphoneX,
-} from "react-native-iphone-x-helper";
+import { getStatusBarHeight, isIphoneX } from "react-native-iphone-x-helper";
 import { BorderlessButton } from "react-native-gesture-handler";
 
 import { Transaction } from "../../services/transactions";
@@ -101,5 +97,4 @@ export const TransactionCards = styled(
   FlatList as new () => FlatList<Transaction>
 ).attrs({
   showsVerticalScrollIndicator: false,
-  contentContainerStyle: { paddingBottom: getBottomSpace() },
 })``;

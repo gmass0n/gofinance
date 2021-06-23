@@ -1,9 +1,5 @@
-import { FlatList } from "react-native";
-import { getBottomSpace } from "react-native-iphone-x-helper";
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
-
-import { Category } from ".";
 
 export const Container = styled.View`
   flex: 1;
@@ -28,9 +24,12 @@ export const Title = styled.Text`
   font-size: ${RFValue(16)}px;
 `;
 
-export const CategoriesList = styled(
-  FlatList as new () => FlatList<Category>
-).attrs({
+export const Content = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false,
-  contentContainerStyle: { padding: 25 },
+  contentContainerStyle: { padding: 25, flex: 1 },
 })``;
+
+export const ChartContainer = styled.View`
+  width: 100%;
+  align-items: center;
+`;

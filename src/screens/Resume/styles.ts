@@ -55,3 +55,9 @@ export const ChartContainer = styled.View`
   width: 100%;
   align-items: center;
 `;
+
+export const LoadingContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+`;

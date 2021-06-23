@@ -4,6 +4,7 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { VictoryPie } from "victory-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
+import { ActivityIndicator } from "react-native";
 import { addMonths, format, subMonths } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -24,6 +25,7 @@ import {
   MonthSelectIcon,
   Month,
   ChartContainer,
+  LoadingContainer,
 } from "./styles";
 
 export interface Category {
@@ -41,10 +43,13 @@ export const Resume: React.FC = () => {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
       (async () => {
+        setIsLoading(true);
+
         const transactions = await loadTransactions();
 
         if (transactions.length > 0) {
@@ -93,6 +98,8 @@ export const Resume: React.FC = () => {
           });
 
           setCategories(totalByCategories);
+
+          setIsLoading(false);
         }
       })();
     }, [selectedDate])
@@ -136,32 +143,40 @@ export const Resume: React.FC = () => {
           </MonthSelectButton>
         </MonthSelect>
 
-        <ChartContainer>
-          <VictoryPie
-            data={categories}
-            colorScale={categories.map((category) => category.color)}
-            style={{
-              labels: {
-                fontSize: RFValue(17),
-                fontWeight: "bold",
-                fill: theme.colors.shape,
-              },
-            }}
-            labelRadius={60}
-            x="formattedPercentage"
-            y="percentage"
-          />
-        </ChartContainer>
+        {isLoading ? (
+          <LoadingContainer>
+            <ActivityIndicator color={theme.colors.secondary} size="large" />
+          </LoadingContainer>
+        ) : (
+          <>
+            <ChartContainer>
+              <VictoryPie
+                data={categories}
+                colorScale={categories.map((category) => category.color)}
+                style={{
+                  labels: {
+                    fontSize: RFValue(17),
+                    fontWeight: "bold",
+                    fill: theme.colors.shape,
+                  },
+                }}
+                labelRadius={60}
+                x="formattedPercentage"
+                y="percentage"
+              />
+            </ChartContainer>
 
-        {categories.length > 0 &&
-          categories.map((category) => (
-            <HistoryCard
-              key={category.id}
-              title={category.title}
-              amount={category.formattedAmount}
-              color={category.color}
-            />
-          ))}
+            {categories.length > 0 &&
+              categories.map((category) => (
+                <HistoryCard
+                  key={category.id}
+                  title={category.title}
+                  amount={category.formattedAmount}
+                  color={category.color}
+                />
+              ))}
+          </>
+        )}
       </Content>
     </Container>
   );

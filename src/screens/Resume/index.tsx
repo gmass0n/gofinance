@@ -1,32 +1,18 @@
 import React, { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { RFValue } from "react-native-responsive-fontsize";
-import { VictoryPie } from "victory-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
 import { ActivityIndicator } from "react-native";
-import { addMonths, format, subMonths } from "date-fns";
-import { ptBR } from "date-fns/locale";
 
 import { HistoryCard } from "../../components/HistoryCard";
+import { MonthSelect } from "../../components/MonthSelect";
 
 import { loadTransactions } from "../../services/transactions";
 
 import { categories as categoriesArr } from "../../utils/categories";
 import { formatCurrency } from "../../utils/formatCurrency";
 
-import {
-  Container,
-  Header,
-  Title,
-  Content,
-  MonthSelect,
-  MonthSelectButton,
-  MonthSelectIcon,
-  Month,
-  ChartContainer,
-  LoadingContainer,
-} from "./styles";
+import { Container, Header, Title, Content, LoadingContainer } from "./styles";
+import { TotalByCategoriesChart } from "../../components/TotalByCategoriesChart";
 
 export interface Category {
   id: string;
@@ -105,16 +91,6 @@ export const Resume: React.FC = () => {
     }, [selectedDate])
   );
 
-  function handleChangeSelectedDate(action: "next" | "previous"): void {
-    setSelectedDate((prevState) => {
-      if (action === "next") {
-        return addMonths(prevState, 1);
-      }
-
-      return subMonths(prevState, 1);
-    });
-  }
-
   return (
     <Container>
       <Header>
@@ -125,23 +101,11 @@ export const Resume: React.FC = () => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           paddingHorizontal: 25,
-          paddingBottom: useBottomTabBarHeight(),
-          flex: 1,
+          paddingBottom: 10,
+          flex: isLoading ? 1 : 0,
         }}
       >
-        <MonthSelect>
-          <MonthSelectButton
-            onPress={() => handleChangeSelectedDate("previous")}
-          >
-            <MonthSelectIcon name="chevron-left" />
-          </MonthSelectButton>
-
-          <Month>{format(selectedDate, "MMMM, yyyy", { locale: ptBR })}</Month>
-
-          <MonthSelectButton onPress={() => handleChangeSelectedDate("next")}>
-            <MonthSelectIcon name="chevron-right" />
-          </MonthSelectButton>
-        </MonthSelect>
+        <MonthSelect date={selectedDate} onChange={setSelectedDate} />
 
         {isLoading ? (
           <LoadingContainer>
@@ -149,22 +113,7 @@ export const Resume: React.FC = () => {
           </LoadingContainer>
         ) : (
           <>
-            <ChartContainer>
-              <VictoryPie
-                data={categories}
-                colorScale={categories.map((category) => category.color)}
-                style={{
-                  labels: {
-                    fontSize: RFValue(17),
-                    fontWeight: "bold",
-                    fill: theme.colors.shape,
-                  },
-                }}
-                labelRadius={60}
-                x="formattedPercentage"
-                y="percentage"
-              />
-            </ChartContainer>
+            <TotalByCategoriesChart data={categories} />
 
             {categories.length > 0 &&
               categories.map((category) => (

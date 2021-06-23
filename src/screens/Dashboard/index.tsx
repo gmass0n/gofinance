@@ -27,6 +27,7 @@ import {
   TransactionCards,
 } from "./styles";
 import { formatCurrency } from "../../utils/formatCurrency";
+import { formatLastTransaction } from "../../utils/formatLastTransaction";
 
 export interface Transaction extends TransactionCardData {
   id: string;
@@ -36,14 +37,17 @@ interface HighlightData {
   entries: {
     amount: number;
     formattedAmount: string;
+    lastTransaction: string;
   };
   expensives: {
     amount: number;
     formattedAmount: string;
+    lastTransaction: string;
   };
   total: {
     amount: number;
     formattedAmount: string;
+    lastTransaction: string;
   };
 }
 
@@ -51,14 +55,17 @@ const initialHighlightData: HighlightData = {
   entries: {
     amount: 0,
     formattedAmount: "",
+    lastTransaction: "",
   },
   expensives: {
     amount: 0,
     formattedAmount: "",
+    lastTransaction: "",
   },
   total: {
     amount: 0,
     formattedAmount: "",
+    lastTransaction: "",
   },
 };
 
@@ -67,37 +74,54 @@ export const Dashboard: React.FC = () => {
 
   const highlightData = transactions.reduce((acc, transaction) => {
     let entriesAmount = acc.entries.amount;
-    let formattedEntriesAmount = acc.entries.formattedAmount;
+    let entriesFormattedAmount = acc.entries.formattedAmount;
+    let entriesLastTransaction = acc.entries.lastTransaction;
 
     let expensivesAmount = acc.expensives.amount;
-    let formattedExpensivesAmount = acc.expensives.formattedAmount;
+    let expensivesFormattedAmount = acc.expensives.formattedAmount;
+    let expensivesLastTransaction = acc.expensives.lastTransaction;
 
     if (transaction.type === "positive") {
       entriesAmount = acc.entries.amount + transaction.amount;
-      formattedEntriesAmount = formatCurrency(entriesAmount);
+      entriesFormattedAmount = formatCurrency(entriesAmount);
+      entriesLastTransaction = formatLastTransaction(
+        new Date(transaction.date),
+        "positive"
+      );
     }
 
     if (transaction.type === "negative") {
       expensivesAmount = acc.expensives.amount - transaction.amount;
-      formattedExpensivesAmount = formatCurrency(expensivesAmount);
+      expensivesFormattedAmount = formatCurrency(expensivesAmount);
+      expensivesLastTransaction = formatLastTransaction(
+        new Date(transaction.date),
+        "negative"
+      );
     }
 
     const totalAmount = entriesAmount + expensivesAmount;
-    const formattedTotalAmount = formatCurrency(totalAmount);
+    const totalFormattedAmount = formatCurrency(totalAmount);
+    const totalLastTransaction = formatLastTransaction(
+      new Date(transaction.date),
+      "total"
+    );
 
     return {
       ...acc,
       entries: {
         amount: entriesAmount,
-        formattedAmount: formattedEntriesAmount,
+        formattedAmount: entriesFormattedAmount,
+        lastTransaction: entriesLastTransaction,
       },
       expensives: {
         amount: expensivesAmount,
-        formattedAmount: formattedExpensivesAmount,
+        formattedAmount: expensivesFormattedAmount,
+        lastTransaction: expensivesLastTransaction,
       },
       total: {
         amount: totalAmount,
-        formattedAmount: formattedTotalAmount,
+        formattedAmount: totalFormattedAmount,
+        lastTransaction: totalLastTransaction,
       },
     };
   }, initialHighlightData);
@@ -145,21 +169,21 @@ export const Dashboard: React.FC = () => {
           type="up"
           title="Entrada"
           amount={highlightData.entries.formattedAmount}
-          lastTransaction="Última entrada dia 13 de novembro"
+          lastTransaction={highlightData.entries.lastTransaction}
         />
 
         <HighlightCard
           type="down"
           title="Saída"
           amount={highlightData.expensives.formattedAmount}
-          lastTransaction="Última saída dia 12 de novembro"
+          lastTransaction={highlightData.expensives.lastTransaction}
         />
 
         <HighlightCard
           type="total"
           title="Saída"
           amount={highlightData.total.formattedAmount}
-          lastTransaction="01 à 16 de novembro"
+          lastTransaction={highlightData.total.lastTransaction}
         />
       </HighlightCards>
 

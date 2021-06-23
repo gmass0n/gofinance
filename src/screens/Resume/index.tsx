@@ -5,15 +5,17 @@ import { ActivityIndicator } from "react-native";
 
 import { HistoryCard } from "../../components/HistoryCard";
 import { MonthSelect } from "../../components/MonthSelect";
+import { TotalByCategoriesChart } from "../../components/TotalByCategoriesChart";
 
 import { loadTransactions } from "../../services/transactions";
 
-import { categories as categoriesArr } from "../../utils/categories";
 import { formatCurrency } from "../../utils/formatCurrency";
 
-import { Container, Header, Title, Content, LoadingContainer } from "./styles";
-import { TotalByCategoriesChart } from "../../components/TotalByCategoriesChart";
+import categoriesArr from "../../assets/jsons/categories.json";
+
 import { useAuth } from "../../hooks/auth";
+
+import { Container, Header, Title, Content, LoadingContainer } from "./styles";
 
 export interface Category {
   id: string;

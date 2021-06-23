@@ -3,12 +3,12 @@ import { getBottomSpace, isIphoneX } from "react-native-iphone-x-helper";
 import { Modalize } from "react-native-modalize";
 import { Portal } from "react-native-portalize";
 
-import { categories } from "../../../../utils/categories";
+import categories from "../../../../assets/jsons/categories.json";
 
 import { Header, Title, Category, Icon, Name } from "./styles";
 
 export interface CategoryProps {
-  key: string; 
+  key: string;
   name: string;
 }
 
@@ -22,7 +22,7 @@ const CategoriesListModalComponent: React.ForwardRefRenderFunction<
   CategoriesListModalProps
 > = ({ category, onSelectCategory }, ref) => {
   return (
-      <Portal>
+    <Portal>
       <Modalize
         ref={ref}
         adjustToContentHeight
@@ -36,7 +36,7 @@ const CategoriesListModalComponent: React.ForwardRefRenderFunction<
           data: categories,
           keyExtractor: (item) => item.key,
           renderItem: ({ item }) => (
-              <Category
+            <Category
               onPress={() => onSelectCategory(item)}
               isSelected={item.key === category.key}
             >

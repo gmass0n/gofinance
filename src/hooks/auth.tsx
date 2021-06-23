@@ -20,6 +20,7 @@ interface IAuthContextData {
   user: User | null;
   signInWithGoogle(): Promise<void>;
   signInWithApple(): Promise<void>;
+  signOut(): Promise<void>;
 }
 
 const AuthContext = createContext({} as IAuthContextData);
@@ -95,8 +96,15 @@ const AuthProvider: React.FC = ({ children }) => {
     }
   }, []);
 
+  const signOut = useCallback(async () => {
+    setUser(null);
+    await AsyncStorage.removeItem("@gofinances:user");
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, signInWithApple }}>
+    <AuthContext.Provider
+      value={{ user, signInWithGoogle, signInWithApple, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

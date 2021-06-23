@@ -27,7 +27,7 @@ import {
 } from "./styles";
 
 export const Dashboard: React.FC = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -57,7 +57,7 @@ export const Dashboard: React.FC = () => {
             </User>
           </UserInfo>
 
-          <LogoutButton onPress={() => {}}>
+          <LogoutButton onPress={signOut}>
             <PowerIcon />
           </LogoutButton>
         </UserWrapper>

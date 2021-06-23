@@ -23,8 +23,6 @@ import {
 export const SignIn: React.FC = () => {
   const { signInWithGoogle, signInWithApple, user } = useAuth();
 
-  console.log(user);
-
   async function handleSignInWithGoogle(): Promise<void> {
     try {
       await signInWithGoogle();

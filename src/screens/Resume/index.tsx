@@ -84,9 +84,9 @@ export const Resume: React.FC = () => {
           });
 
           setCategories(totalByCategories);
-
-          setIsLoading(false);
         }
+
+        setIsLoading(false);
       })();
     }, [selectedDate])
   );

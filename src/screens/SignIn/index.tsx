@@ -1,6 +1,8 @@
-import React from "react";
-import { Alert } from "react-native";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { ActivityIndicator, Alert } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
+import { useTheme } from "styled-components";
 
 import AppleSvg from "../../assets/apple.svg";
 import GoogleSvg from "../../assets/google.svg";
@@ -21,7 +23,9 @@ import {
 } from "./styles";
 
 export const SignIn: React.FC = () => {
-  const { signInWithGoogle, signInWithApple, user } = useAuth();
+  const theme = useTheme();
+
+  const { signInWithGoogle, signInWithApple, isSigningIn } = useAuth();
 
   async function handleSignInWithGoogle(): Promise<void> {
     try {
@@ -72,6 +76,13 @@ export const SignIn: React.FC = () => {
             onPress={handleSignInWithApple}
           />
         </FooterWrapper>
+
+        {isSigningIn && (
+          <ActivityIndicator
+            color={theme.colors.shape}
+            style={{ marginTop: 20 }}
+          />
+        )}
       </Footer>
     </Container>
   );

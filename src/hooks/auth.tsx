@@ -21,12 +21,16 @@ interface IAuthContextData {
   signInWithGoogle(): Promise<void>;
   signInWithApple(): Promise<void>;
   signOut(): Promise<void>;
+  isLoadingStoragedUser: boolean;
+  isSigningIn: boolean;
 }
 
 const AuthContext = createContext({} as IAuthContextData);
 
 const AuthProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoadingStoragedUser, setIsLoadingStoragedUser] = useState(true);
+  const [isSigningIn, setIsSigningIn] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -35,11 +39,15 @@ const AuthProvider: React.FC = ({ children }) => {
       if (storagedUser) {
         setUser(JSON.parse(storagedUser));
       }
+
+      setIsLoadingStoragedUser(false);
     })();
   }, []);
 
   const signInWithGoogle = useCallback(async () => {
     try {
+      setIsSigningIn(true);
+
       const result = await Google.logInAsync({
         iosClientId:
           "144146686377-avq9tgeituuv2s5qnhnma806g4nin91r.apps.googleusercontent.com",
@@ -65,11 +73,15 @@ const AuthProvider: React.FC = ({ children }) => {
       }
     } catch (error) {
       throw new Error(error);
+    } finally {
+      setIsSigningIn(false);
     }
   }, []);
 
   const signInWithApple = useCallback(async () => {
     try {
+      setIsSigningIn(true);
+
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
@@ -78,10 +90,14 @@ const AuthProvider: React.FC = ({ children }) => {
       });
 
       if (credential) {
+        const name = credential.fullName!.givenName!;
+        const photo = `https://ui-avatars.com/api/?name=${name}&length=1&background=random`;
+
         const loggedUser: User = {
           id: String(credential.user),
           email: credential.email!,
-          name: credential.fullName!.givenName!,
+          name,
+          photo,
         };
 
         await AsyncStorage.setItem(
@@ -93,6 +109,8 @@ const AuthProvider: React.FC = ({ children }) => {
       }
     } catch (error) {
       throw new Error(error);
+    } finally {
+      setIsSigningIn(false);
     }
   }, []);
 
@@ -103,7 +121,14 @@ const AuthProvider: React.FC = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, signInWithGoogle, signInWithApple, signOut }}
+      value={{
+        user,
+        signInWithGoogle,
+        signInWithApple,
+        signOut,
+        isLoadingStoragedUser,
+        isSigningIn,
+      }}
     >
       {children}
     </AuthContext.Provider>

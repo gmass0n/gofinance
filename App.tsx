@@ -15,7 +15,7 @@ import {
 
 import { theme } from "./src/global/styles/theme";
 
-import { AuthProvider } from "./src/hooks/auth";
+import { AuthProvider, useAuth } from "./src/hooks/auth";
 
 import { Routes } from "./src/routes";
 
@@ -26,7 +26,9 @@ export const App: React.FC = () => {
     Poppins_700Bold,
   });
 
-  if (!isFontsLoaded) return <AppLoading />;
+  const { isLoadingStoragedUser } = useAuth();
+
+  if (!isFontsLoaded || isLoadingStoragedUser) return <AppLoading />;
 
   return (
     <ThemeProvider theme={theme}>

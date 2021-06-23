@@ -13,6 +13,7 @@ import { formatCurrency } from "../../utils/formatCurrency";
 
 import { Container, Header, Title, Content, LoadingContainer } from "./styles";
 import { TotalByCategoriesChart } from "../../components/TotalByCategoriesChart";
+import { useAuth } from "../../hooks/auth";
 
 export interface Category {
   id: string;
@@ -27,6 +28,8 @@ export interface Category {
 export const Resume: React.FC = () => {
   const theme = useTheme();
 
+  const { user } = useAuth();
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -36,7 +39,7 @@ export const Resume: React.FC = () => {
       (async () => {
         setIsLoading(true);
 
-        const transactions = await loadTransactions();
+        const transactions = await loadTransactions(user!.id);
 
         if (transactions.length > 0) {
           const expensivesTransactions = transactions.filter(
@@ -88,7 +91,7 @@ export const Resume: React.FC = () => {
 
         setIsLoading(false);
       })();
-    }, [selectedDate])
+    }, [selectedDate, user])
   );
 
   return (

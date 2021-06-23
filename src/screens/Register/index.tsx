@@ -15,6 +15,8 @@ import { CategoryProps } from "../../components/Form/CategorySelect/CategoriesLi
 
 import { Transaction, TransactionType } from "../../services/transactions";
 
+import { useAuth } from "../../hooks/auth";
+
 import {
   Container,
   Header,
@@ -40,10 +42,11 @@ const formSchema = Yup.object().shape({
 export const Register: React.FC = () => {
   const navigation = useNavigation();
 
+  const { user } = useAuth();
+
   const [selectedTransactionType, setSelectedTransactionType] = useState<
     TransactionType | ""
   >("");
-
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryProps | undefined
   >(undefined);
@@ -85,7 +88,7 @@ export const Register: React.FC = () => {
 
     try {
       const storagedTransactions = await AsyncStorage.getItem(
-        "@gofinances:transactions"
+        `@gofinances:${user!.id}:transactions`
       );
       const transactions = storagedTransactions
         ? JSON.parse(storagedTransactions)
@@ -94,7 +97,7 @@ export const Register: React.FC = () => {
       const newTransactions = [...transactions, data];
 
       await AsyncStorage.setItem(
-        "@gofinances:transactions",
+        `@gofinances:${user!.id}:transactions`,
         JSON.stringify(newTransactions)
       );
 

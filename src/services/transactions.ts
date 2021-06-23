@@ -15,9 +15,9 @@ export interface Transaction {
   formattedDate?: string;
 }
 
-export async function loadTransactions(): Promise<Transaction[]> {
+export async function loadTransactions(userId: string): Promise<Transaction[]> {
   const storagedTransactions = await AsyncStorage.getItem(
-    "@gofinances:transactions"
+    `@gofinances:${userId}:transactions`
   );
 
   if (storagedTransactions) {

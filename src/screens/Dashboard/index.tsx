@@ -36,11 +36,11 @@ export const Dashboard: React.FC = () => {
   useFocusEffect(
     useCallback(() => {
       (async () => {
-        const response = await loadTransactions();
+        const response = await loadTransactions(user!.id);
 
         setTransactions(response);
       })();
-    }, [])
+    }, [user])
   );
 
   return (

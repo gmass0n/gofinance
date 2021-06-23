@@ -2,7 +2,10 @@ import React, { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { VictoryPie } from "victory-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useTheme } from "styled-components";
+import { addMonths, format, subMonths } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 import { HistoryCard } from "../../components/HistoryCard";
 
@@ -11,7 +14,17 @@ import { loadTransactions } from "../../services/transactions";
 import { categories as categoriesArr } from "../../utils/categories";
 import { formatCurrency } from "../../utils/formatCurrency";
 
-import { Container, Header, Title, Content, ChartContainer } from "./styles";
+import {
+  Container,
+  Header,
+  Title,
+  Content,
+  MonthSelect,
+  MonthSelectButton,
+  MonthSelectIcon,
+  Month,
+  ChartContainer,
+} from "./styles";
 
 export interface Category {
   id: string;
@@ -26,6 +39,7 @@ export interface Category {
 export const Resume: React.FC = () => {
   const theme = useTheme();
 
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [categories, setCategories] = useState<Category[]>([]);
 
   useFocusEffect(
@@ -35,7 +49,12 @@ export const Resume: React.FC = () => {
 
         if (transactions.length > 0) {
           const expensivesTransactions = transactions.filter(
-            (transaction) => transaction.type === "negative"
+            (transaction) =>
+              transaction.type === "negative" &&
+              new Date(transaction.date).getMonth() ===
+                selectedDate.getMonth() &&
+              new Date(transaction.date).getFullYear() ===
+                selectedDate.getFullYear()
           );
 
           const expensivesTransactionsTotal = expensivesTransactions.reduce(
@@ -76,8 +95,18 @@ export const Resume: React.FC = () => {
           setCategories(totalByCategories);
         }
       })();
-    }, [])
+    }, [selectedDate])
   );
+
+  function handleChangeSelectedDate(action: "next" | "previous"): void {
+    setSelectedDate((prevState) => {
+      if (action === "next") {
+        return addMonths(prevState, 1);
+      }
+
+      return subMonths(prevState, 1);
+    });
+  }
 
   return (
     <Container>
@@ -85,7 +114,28 @@ export const Resume: React.FC = () => {
         <Title>Resumo por categoria</Title>
       </Header>
 
-      <Content>
+      <Content
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 25,
+          paddingBottom: useBottomTabBarHeight(),
+          flex: 1,
+        }}
+      >
+        <MonthSelect>
+          <MonthSelectButton
+            onPress={() => handleChangeSelectedDate("previous")}
+          >
+            <MonthSelectIcon name="chevron-left" />
+          </MonthSelectButton>
+
+          <Month>{format(selectedDate, "MMMM, yyyy", { locale: ptBR })}</Month>
+
+          <MonthSelectButton onPress={() => handleChangeSelectedDate("next")}>
+            <MonthSelectIcon name="chevron-right" />
+          </MonthSelectButton>
+        </MonthSelect>
+
         <ChartContainer>
           <VictoryPie
             data={categories}

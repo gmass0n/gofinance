@@ -1,9 +1,9 @@
 import { RectButton } from "react-native-gesture-handler";
 import styled, { css } from "styled-components/native";
-import { Feather } from '@expo/vector-icons'
+import { Feather } from "@expo/vector-icons";
 import { RFValue } from "react-native-responsive-fontsize";
 
-import { TransactionType } from ".";
+import { TransactionType } from "../../../services/transactions";
 
 interface ContainerProps {
   isActive: boolean;
@@ -25,25 +25,31 @@ export const Container = styled(RectButton)<ContainerProps>`
   padding: 16px 20px;
   border-radius: 5px;
 
-  ${({ theme, type, isActive }) => (type === 'positive' && isActive) && css`
-    background-color: ${theme.colors.successLight};
-  `}
+  ${({ theme, type, isActive }) =>
+    type === "positive" &&
+    isActive &&
+    css`
+      background-color: ${theme.colors.successLight};
+    `}
 
-  ${({ theme, type, isActive }) => (type === 'negative' && isActive) && css`
-    background-color: ${theme.colors.attentionLight};
-  `}
+  ${({ theme, type, isActive }) =>
+    type === "negative" &&
+    isActive &&
+    css`
+      background-color: ${theme.colors.attentionLight};
+    `}
 `;
 
-export const Icon  = styled(Feather)<IconProps>`
+export const Icon = styled(Feather)<IconProps>`
   font-size: ${RFValue(20)}px;
   margin-right: 10px;
 
-  color: ${({ theme, type }) => type === 'positive' ? theme.colors.success : theme.colors.attention};
+  color: ${({ theme, type }) =>
+    type === "positive" ? theme.colors.success : theme.colors.attention};
 `;
 
 export const Title = styled.Text`
   font-size: ${RFValue(14)}px;
   font-family: ${({ theme }) => theme.fonts.regular};
-  color: ${({theme}) => theme.colors.textDark};
+  color: ${({ theme }) => theme.colors.textDark};
 `;
-

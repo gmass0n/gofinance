@@ -3,10 +3,11 @@ import { Platform } from "react-native";
 import { useTheme } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
+import { getBottomSpace, isIphoneX } from "react-native-iphone-x-helper";
 
 import { Dashboard } from "../screens/Dashboard";
 import { Register } from "../screens/Register";
-import { getBottomSpace, isIphoneX } from "react-native-iphone-x-helper";
+import { Resume } from "../screens/Resume";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -53,7 +54,7 @@ export const AppRoutes: React.FC = () => {
 
       <Screen
         name="Resume"
-        component={Register}
+        component={Resume}
         options={{
           tabBarLabel: "Resumo",
           tabBarIcon: ({ color }) => (

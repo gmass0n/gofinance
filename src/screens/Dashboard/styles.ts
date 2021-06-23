@@ -7,9 +7,9 @@ import {
   getStatusBarHeight,
   isIphoneX,
 } from "react-native-iphone-x-helper";
-
-import { Transaction } from ".";
 import { BorderlessButton } from "react-native-gesture-handler";
+
+import { Transaction } from "../../services/transactions";
 
 export const Container = styled.View`
   flex: 1;

@@ -20,8 +20,8 @@ export interface TransactionCardData {
   amount: number;
   category: string;
   date: string;
-  formattedAmount: string;
-  formattedDate: string;
+  formattedAmount?: string;
+  formattedDate?: string;
 }
 
 interface TransactionCardProps {

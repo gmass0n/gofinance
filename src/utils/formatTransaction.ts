@@ -1,4 +1,4 @@
-import { Transaction } from "../screens/Dashboard";
+import { Transaction } from "../services/transactions";
 
 import { formatCurrency } from "./formatCurrency";
 import { formatDate } from "./formatDate";

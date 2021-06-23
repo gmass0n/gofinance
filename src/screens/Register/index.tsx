@@ -3,18 +3,17 @@ import { TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useNavigation } from '@react-navigation/native';
-import uuid from 'react-native-uuid';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import uuid from "react-native-uuid";
 
 import { UncontrolledInput } from "../../components/Form/UncontrolledInput";
 import { Button } from "../../components/Form/Button";
 import { CategorySelect } from "../../components/Form/CategorySelect";
-import {
-  TransactionType,
-  TransactionTypeButton,
-} from "../../components/Form/TransactionTypeButton";
+import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
 import { CategoryProps } from "../../components/Form/CategorySelect/CategoriesListModal";
+
+import { Transaction, TransactionType } from "../../services/transactions";
 
 import {
   Container,
@@ -24,12 +23,10 @@ import {
   FormFields,
   TransactionTypeButtons,
 } from "./styles";
-import { useEffect } from "react";
-import { Transaction } from "../Dashboard";
 
 interface FormData {
   name: string;
-  amount: string;
+  amount: number;
 }
 
 const formSchema = Yup.object().shape({
@@ -43,30 +40,22 @@ const formSchema = Yup.object().shape({
 export const Register: React.FC = () => {
   const navigation = useNavigation();
 
-  const [selectedTransactionType, setSelectedTransactionType] =
-    useState<TransactionType | "">("");
+  const [selectedTransactionType, setSelectedTransactionType] = useState<
+    TransactionType | ""
+  >("");
 
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategoryProps | undefined>(undefined);
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryProps | undefined
+  >(undefined);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm({
     resolver: yupResolver(formSchema),
   });
-
-  useEffect(() => {
-    (async () => {
-      const data = await AsyncStorage.getItem('@gofinances:transactions');
-
-      if(data) {
-        console.log(JSON.parse(data))
-      }
-    })()
-  }, [])
 
   function handleSelectTransactionType(type: TransactionType): void {
     setSelectedTransactionType(type);
@@ -80,8 +69,8 @@ export const Register: React.FC = () => {
     if (!selectedTransactionType) {
       return Alert.alert("Por favor, selecione o tipo da transação!");
     }
-   
-    if (!selectedCategory) { 
+
+    if (!selectedCategory) {
       return Alert.alert("Por favor, selecione a categoria!");
     }
 
@@ -91,25 +80,31 @@ export const Register: React.FC = () => {
       amount: formData.amount,
       type: selectedTransactionType,
       category: selectedCategory?.key,
-      date: new Date().toISOString()
-    }; 
-  
+      date: new Date().toISOString(),
+    };
+
     try {
-      const storagedTransactions = await AsyncStorage.getItem('@gofinances:transactions');
-      const transactions = storagedTransactions ? JSON.parse(storagedTransactions) : [];
+      const storagedTransactions = await AsyncStorage.getItem(
+        "@gofinances:transactions"
+      );
+      const transactions = storagedTransactions
+        ? JSON.parse(storagedTransactions)
+        : [];
 
       const newTransactions = [...transactions, data];
 
-      await AsyncStorage.setItem('@gofinances:transactions', JSON.stringify(newTransactions));
+      await AsyncStorage.setItem(
+        "@gofinances:transactions",
+        JSON.stringify(newTransactions)
+      );
 
       setSelectedCategory(undefined);
-      setSelectedTransactionType('');
-      reset()
+      setSelectedTransactionType("");
+      reset();
 
-      navigation.navigate('Dashboard')
+      navigation.navigate("Dashboard");
     } catch (error) {
-      console.log(error); 
-      Alert.alert("Ops, não foi possível salvar!")
+      Alert.alert("Ops, não foi possível salvar!");
     }
   }
 

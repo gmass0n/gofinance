@@ -25,7 +25,7 @@ export const Title = styled.Text`
   font-size: ${RFValue(26)}px;
   text-align: center;
 
-  margin-top: 65px;
+  margin-top: 60px;
 `;
 
 export const SignInTitle = styled.Text`
@@ -35,7 +35,7 @@ export const SignInTitle = styled.Text`
   text-align: center;
   line-height: ${RFValue(22)}px;
 
-  margin: 65px 0;
+  margin: 60px 0 70px;
 `;
 
 export const Footer = styled.View`
@@ -46,7 +46,7 @@ export const Footer = styled.View`
 
 export const FooterWrapper = styled.View`
   margin-top: ${RFPercentage(-4)}px;
-  padding: 0 30px;
+  padding: 0 25px;
 
   justify-content: space-between;
 `;

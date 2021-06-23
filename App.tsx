@@ -15,7 +15,10 @@ import {
 
 import { theme } from "./src/global/styles/theme";
 
+import { AuthProvider } from "./src/hooks/auth";
+
 import { Routes } from "./src/routes";
+
 import { SignIn } from "./src/screens/SignIn";
 
 export const App: React.FC = () => {
@@ -33,7 +36,9 @@ export const App: React.FC = () => {
 
       {/* <Routes /> */}
 
-      <SignIn />
+      <AuthProvider>
+        <SignIn />
+      </AuthProvider>
     </ThemeProvider>
   );
 };

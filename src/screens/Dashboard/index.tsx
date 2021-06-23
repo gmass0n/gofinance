@@ -6,6 +6,9 @@ import { TransactionCard } from "../../components/TransactionCard";
 
 import { loadTransactions, Transaction } from "../../services/transactions";
 
+import { getHighlightData } from "../../utils/getHighlightData";
+import { useAuth } from "../../hooks/auth";
+
 import {
   Container,
   Header,
@@ -22,9 +25,10 @@ import {
   Title,
   TransactionCards,
 } from "./styles";
-import { getHighlightData } from "../../utils/getHighlightData";
 
 export const Dashboard: React.FC = () => {
+  const { user } = useAuth();
+
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const highlightData = getHighlightData(transactions);
@@ -44,12 +48,12 @@ export const Dashboard: React.FC = () => {
       <Header>
         <UserWrapper>
           <UserInfo>
-            <Photo source={{ uri: "https://github.com/gmass0n.png" }} />
+            <Photo source={{ uri: user?.photo }} />
 
             <User>
               <UserGretting>Olá, </UserGretting>
 
-              <UserName>Gabriel</UserName>
+              <UserName>{user?.name}</UserName>
             </User>
           </UserInfo>
 
@@ -76,7 +80,7 @@ export const Dashboard: React.FC = () => {
 
         <HighlightCard
           type="total"
-          title="Saída"
+          title="Total"
           amount={highlightData.total.formattedAmount}
           lastTransaction={highlightData.total.lastTransaction}
         />

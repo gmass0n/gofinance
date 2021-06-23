@@ -19,8 +19,6 @@ import { AuthProvider } from "./src/hooks/auth";
 
 import { Routes } from "./src/routes";
 
-import { SignIn } from "./src/screens/SignIn";
-
 export const App: React.FC = () => {
   const [isFontsLoaded] = useFonts({
     Poppins_400Regular,
@@ -34,10 +32,8 @@ export const App: React.FC = () => {
     <ThemeProvider theme={theme}>
       <StatusBar barStyle="light-content" />
 
-      {/* <Routes /> */}
-
       <AuthProvider>
-        <SignIn />
+        <Routes />
       </AuthProvider>
     </ThemeProvider>
   );

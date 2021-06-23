@@ -42,8 +42,8 @@ export const UserInfo = styled.View`
 export const LogoutButton = styled(BorderlessButton)``;
 
 export const Photo = styled.Image`
-  width: ${RFValue(50)}px;
-  height: ${RFValue(50)}px;
+  width: ${RFValue(45)}px;
+  height: ${RFValue(45)}px;
   border-radius: ${RFValue(25)}px;
   margin-right: 15px;
 `;

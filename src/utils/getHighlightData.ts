@@ -24,17 +24,17 @@ interface HighlightData {
 const initialHighlightData: HighlightData = {
   entries: {
     amount: 0,
-    formattedAmount: "",
+    formattedAmount: "R$ 0,00",
     lastTransaction: "",
   },
   expensives: {
     amount: 0,
-    formattedAmount: "",
+    formattedAmount: "R$ 0,00",
     lastTransaction: "",
   },
   total: {
     amount: 0,
-    formattedAmount: "",
+    formattedAmount: "R$ 0,00",
     lastTransaction: "",
   },
 };

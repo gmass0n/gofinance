@@ -42,7 +42,9 @@ export const HighlightCard: React.FC<HighlightCardProps> = ({
       <Footer>
         <Amount type={type}>{amount}</Amount>
 
-        <LastTransaction type={type}>{lastTransaction}</LastTransaction>
+        {!!lastTransaction && (
+          <LastTransaction type={type}>{lastTransaction}</LastTransaction>
+        )}
       </Footer>
     </Container>
   );
